@@ -4,7 +4,7 @@ from dependencies.dependencies import *
 from models import models
 from dependencies.database import SessionLocal, engine
 
-app = FastAPI(ssl_keyfile="/path/to/your/private.key", ssl_certfile="files/api.seodash.vincent-dev.xyz.crt")
+app = FastAPI()
 
 origins =['*']
 
