@@ -71,7 +71,7 @@ async def get_all_backlinks(bId, db:Session = Depends(get_db)):
         raise HTTPException(status_code=404)
     return result
 
-@router.post("/backlinks/")
+@router.post("/backlinks")
 async def create_new_backlink(data:backlink_schema, db:Session =  Depends(get_db)):
     new_backlink = models.Backlinks(
         link  = data.link,
