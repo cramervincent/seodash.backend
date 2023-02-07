@@ -9,7 +9,7 @@ from schemas.backlinks import *
 router = APIRouter()
 
 
-@router.get("/backlinks/")
+@router.get("/backlinks")
 async def get_all_backlinks(db:Session = Depends(get_db)):
     result = db.query(models.Backlinks).all()
     return result
