@@ -5,6 +5,10 @@ from models import models
 from schemas.auth import UserSchema, UserLoginSchema
 
 router = APIRouter()
+@router.get("/users")
+async def get_all_users(db:Session = Depends(get_db)):
+    return db.query(models.Users).all()
+
 
 @router.post("/user/signup")
 async def create_user(user: UserSchema, db:Session = Depends(get_db)):
@@ -19,8 +23,8 @@ async def create_user(user: UserSchema, db:Session = Depends(get_db)):
 
 @router.post("/user/login")
 async def user_login(user: UserLoginSchema, db:Session=Depends(get_db)):
-    if check_user(user, db):
-        return signJWT(user.email)
-    return {
-        "error": "Wrong login details!"
-        }
+    if not check_user(user, db):
+        raise HTTPException(status_code=401, detail='Gebruikersnaam en/of wachtwoord niet correct.')
+        
+    return signJWT(user.email)
+   

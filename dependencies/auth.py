@@ -9,9 +9,15 @@ from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from models import models
+
+# onderstaande uit env vars halen
 JWT_SECRET = "7bc7fbe8d1e74426c42838d44efa62ff4f867ce3a37f96a209586ffcaa79290d"
 JWT_ALGORITHM = "HS256"
-salt = bcrypt.gensalt()
+salt = b'$2b$12$WBW53Ho5naGky3z/P6tmx.' 
+
+
+# bcrypt.gensalt()
+print(salt)
 
 def hashPassword(plain_psw):
     bytes = plain_psw.encode('utf-8')
