@@ -3,18 +3,19 @@ from dependencies.dependencies import *
 from models import models
 from models import *
 from functions.functions import scan_all_backlinks
+from dependencies.auth import JWTBearer
 
 from schemas.backlinks import *
 
 router = APIRouter()
 
 
-@router.get("/backlinks")
+@router.get("/backlinks", dependencies=[Depends(JWTBearer())])
 async def get_all_backlinks(db:Session = Depends(get_db)):
     result = db.query(models.Backlinks).all()
     return result
 
-@router.get("/backlinks/scan")
+@router.get("/backlinks/scan", dependencies=[Depends(JWTBearer())])
 async def get_all_backlinks(db:Session = Depends(get_db)):
     from datetime import date
     results = db.query(models.Backlinks).all()
@@ -40,7 +41,7 @@ async def get_all_backlinks(db:Session = Depends(get_db)):
     return db.query(models.Backlinks).all()
 
 
-@router.get("/backlinks/scan/{bId}")
+@router.get("/backlinks/scan/{bId}", dependencies=[Depends(JWTBearer())])
 async def get_all_backlinks(bId, db: Session = Depends(get_db)):
     from datetime import date
     results = db.query(models.Backlinks).filter(models.Backlinks.id == bId).first()
@@ -64,14 +65,14 @@ async def get_all_backlinks(bId, db: Session = Depends(get_db)):
 
 
 
-@router.get("/backlinks/{bId}")
+@router.get("/backlinks/{bId}", dependencies=[Depends(JWTBearer())])
 async def get_all_backlinks(bId, db:Session = Depends(get_db)):
     result = db.query(models.Backlinks).filter(models.Backlinks.id == bId).first()
     if not result:
         raise HTTPException(status_code=404)
     return result
 
-@router.post("/backlinks")
+@router.post("/backlinks", dependencies=[Depends(JWTBearer())])
 async def create_new_backlink(data:backlink_schema, db:Session =  Depends(get_db)):
     new_backlink = models.Backlinks(
         link  = data.link,
@@ -87,7 +88,7 @@ async def create_new_backlink(data:backlink_schema, db:Session =  Depends(get_db
 
     return new_backlink
 
-@router.delete("/backlinks/{bId}")
+@router.delete("/backlinks/{bId}", dependencies=[Depends(JWTBearer())])
 async def delete_a_backlink(bId, db:Session =  Depends(get_db)):
     result = db.query(models.Backlinks).filter(models.Backlinks.id == bId).first()
     if not result:
