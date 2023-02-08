@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import backlinks
+from routers import backlinks, auth
 from dependencies.dependencies import *
 from models import models
 from dependencies.database import SessionLocal, engine
@@ -18,5 +18,6 @@ app.add_middleware(
 
 models.Base.metadata.create_all(bind=engine)
 
-app.include_router(backlinks.router, tags=['backlinks'])
+app.include_router(backlinks.router, tags=['Backlinks'])
+app.include_router(auth.router, tags=['Auth'])
 

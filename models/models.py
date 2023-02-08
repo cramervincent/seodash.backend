@@ -15,3 +15,10 @@ class Backlinks(Base):
     da = Column(String, index=True)
     last_check = Column(String, index=True)
 
+class Users(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    fullname = Column(String, index=True)
+    email = Column(String, index=True)
+    password = Column(String, index=True)
