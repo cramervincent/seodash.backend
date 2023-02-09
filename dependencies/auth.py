@@ -17,7 +17,7 @@ salt = b'$2b$12$WBW53Ho5naGky3z/P6tmx.'
 
 
 # bcrypt.gensalt()
-print(salt)
+# print(salt)
 
 def hashPassword(plain_psw):
     bytes = plain_psw.encode('utf-8')
@@ -46,12 +46,19 @@ def decodeJWT(token: str) -> dict:
         return {}
 
 def check_user(data: UserLoginSchema, db:Session):
+    # uit env vars halen:
+    superAdmin = {
+        'username':'admin',
+        'password': hashPassword('admin')        
+    }
+    if data.email == superAdmin['username'] and hashPassword(data.password) == superAdmin['password']:
+        return True
     
     users = db.query(models.Users).all()
     for user in users:
-        print(user.email, data.email)
         if user.email == data.email and user.password == hashPassword(data.password):
             return True
+    
     return False 
 
 
