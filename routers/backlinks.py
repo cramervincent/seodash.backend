@@ -1,12 +1,13 @@
-from fastapi import APIRouter
+
 from dependencies.dependencies import *
 from models import models
-from models import *
+
 from functions.functions import scan_all_backlinks
 from dependencies.auth import JWTBearer
 
 from schemas.backlinks import *
 
+from fastapi import APIRouter
 router = APIRouter()
 
 
@@ -22,7 +23,6 @@ async def get_all_backlinks(db:Session = Depends(get_db)):
     today = date.today().strftime('%m/%d/%Y')
     
     for result in results:  
-        print(f"{result.id} / {len(results)}")
         entry = db.get(models.Backlinks, result.id)
         
         
