@@ -2,26 +2,27 @@ from typing import Union, Dict
 import time
 import jwt
 import bcrypt
+import os
 from schemas.auth import UserLoginSchema
 from dependencies.dependencies import *
 from dependencies.database import *
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
 from models import models
 
-# onderstaande uit env vars halen
-JWT_SECRET = "7bc7fbe8d1e74426c42838d44efa62ff4f867ce3a37f96a209586ffcaa79290d"
-JWT_ALGORITHM = "HS256"
-salt = b'$2b$12$WBW53Ho5naGky3z/P6tmx.' 
+from dotenv import load_dotenv
+
+load_dotenv() 
+
+JWT_SECRET = os.getenv('JWT_SECRET')
+JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
+SALT =  os.getenv('PASSWORD_SALT').encode()
 
 
-# bcrypt.gensalt()
-# print(salt)
 
 def hashPassword(plain_psw):
     bytes = plain_psw.encode('utf-8')
-    return bcrypt.hashpw(bytes, salt)
+    return bcrypt.hashpw(bytes, SALT)
 
 def token_response(token: str):
     return {
@@ -46,10 +47,10 @@ def decodeJWT(token: str) -> dict:
         return {}
 
 def check_user(data: UserLoginSchema, db:Session):
-    # uit env vars halen:
+    
     superAdmin = {
-        'username':'admin',
-        'password': hashPassword('admin')        
+        'username': os.getenv('ADMIN_USR'),
+        'password': hashPassword(os.getenv('ADMIN_PSW'))
     }
     if data.email == superAdmin['username'] and hashPassword(data.password) == superAdmin['password']:
         return True

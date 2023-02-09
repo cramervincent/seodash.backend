@@ -25,6 +25,6 @@ async def create_user(user: UserSchema, db:Session = Depends(get_db)):
 async def user_login(user: UserLoginSchema, db:Session=Depends(get_db)):
     if not check_user(user, db):
         raise HTTPException(status_code=401, detail='Gebruikersnaam en/of wachtwoord niet correct.')
-        
+       
     return signJWT(user.email)
    
