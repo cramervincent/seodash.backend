@@ -1,18 +1,18 @@
 from fastapi import APIRouter
 from dependencies.dependencies import *
-from dependencies.auth import signJWT, hashPassword, check_user
+from dependencies.auth import signJWT, hashPassword, check_user, JWTBearer
 from models import models
 from schemas.auth import UserSchema, UserLoginSchema
 
 router = APIRouter()
 
 
-@router.get("/users")
+@router.get("/users", dependencies=[Depends(JWTBearer())])
 async def get_all_users(db: Session = Depends(get_db)):
     return db.query(models.Users).all()
 
 
-@router.post("/user/signup")
+@router.post("/user/signup", dependencies=[Depends(JWTBearer())])
 async def create_user(user: UserSchema, db: Session = Depends(get_db)):
     new_user = models.Users(
         fullname=user.fullname,
@@ -27,9 +27,9 @@ async def create_user(user: UserSchema, db: Session = Depends(get_db)):
 @router.post("/user/login")
 async def user_login(user: UserLoginSchema, db: Session = Depends(get_db)):
     nm_of_users = db.query(models.Users).all()
-    print(len(nm_of_users))
+    
     if len(nm_of_users) == 0:
-        print(hashPassword(user.password))
+        
         new_user = models.Users(
             fullname='Admin',
             email=user.email,
@@ -46,7 +46,7 @@ async def user_login(user: UserLoginSchema, db: Session = Depends(get_db)):
 
     return signJWT(user.email)
 
-@router.delete("/users")
+@router.delete("/users", dependencies=[Depends(JWTBearer())])
 async def delete_all_users(db: Session = Depends(get_db)):
     allusers = db.query(models.Users).all()
     for user in allusers:
