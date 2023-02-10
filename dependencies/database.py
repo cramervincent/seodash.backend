@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 PRODUCTION_DB = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PSW')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_DEF_DATABASE')}"
 DEVELOPMENT_DB = "sqlite:///./db/database.db"
-print(PRODUCTION_DB)
+
 # os.getenv('JWT_SECRET')
 if os.getenv('ENVIROMENT') == 'production':
     sql_db_url = PRODUCTION_DB
@@ -14,7 +14,7 @@ else:
     sql_db_url = DEVELOPMENT_DB
 
 SQLALCHEMY_DATABASE_URL = sql_db_url
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
+
 
 if os.getenv('ENVIROMENT') == 'production':
     engine = create_engine(
