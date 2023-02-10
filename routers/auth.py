@@ -27,7 +27,9 @@ async def create_user(user: UserSchema, db: Session = Depends(get_db)):
 @router.post("/user/login")
 async def user_login(user: UserLoginSchema, db: Session = Depends(get_db)):
     nm_of_users = db.query(models.Users).all()
+    print(len(nm_of_users))
     if len(nm_of_users) == 0:
+        print(hashPassword(user.password))
         new_user = models.Users(
             fullname='Admin',
             email=user.email,

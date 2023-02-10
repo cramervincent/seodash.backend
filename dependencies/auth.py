@@ -12,23 +12,24 @@ from models import models
 
 from dotenv import load_dotenv
 
-load_dotenv() 
+load_dotenv()
 
 JWT_SECRET = os.getenv('JWT_SECRET')
 JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
 
-SALT =  os.getenv('PASSWORD_SALT').encode()
-
+SALT = os.getenv('PASSWORD_SALT').encode()
 
 
 def hashPassword(plain_psw):
     bytes = plain_psw.encode('utf-8')
     return bcrypt.hashpw(bytes, SALT)
 
+
 def token_response(token: str):
     return {
         "access_token": token
     }
+
 
 def signJWT(user_id: str) -> Dict[str, str]:
     payload = {
@@ -39,23 +40,24 @@ def signJWT(user_id: str) -> Dict[str, str]:
 
     return token_response(token)
 
+
 def decodeJWT(token: str) -> dict:
     try:
-        decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        decoded_token = jwt.decode(
+            token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return decoded_token if decoded_token["expires"] >= time.time() else None
     except:
         return {}
 
-def check_user(data: UserLoginSchema, db:Session):    
+
+def check_user(data: UserLoginSchema, db: Session):
     users = db.query(models.Users).all()
     for user in users:
-        print(user.email, ":", user.password, '\n', data.password, '\n', hashPassword(data.password).decode())
+        print(user.password, '\n', hashPassword(data.password))
         if user.email == data.email and user.password == hashPassword(data.password):
             return True
-    
-    return False 
 
-
+    return False
 
 
 class JWTBearer(HTTPBearer):
@@ -66,12 +68,15 @@ class JWTBearer(HTTPBearer):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
+                raise HTTPException(
+                    status_code=403, detail="Invalid authentication scheme.")
             if not self.verify_jwt(credentials.credentials):
-                raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+                raise HTTPException(
+                    status_code=403, detail="Invalid token or expired token.")
             return credentials.credentials
         else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+            raise HTTPException(
+                status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtoken: str) -> bool:
         isTokenValid: bool = False
