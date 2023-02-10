@@ -12,5 +12,5 @@ COPY . .
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
 
 
-RUN alembic revision --autogenerate
-RUN alembic upgrade head
+# RUN alembic revision --autogenerate
+# RUN alembic upgrade head
