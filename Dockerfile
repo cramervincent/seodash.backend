@@ -10,7 +10,7 @@ COPY . .
 # CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
 
 
-RUN chmod +x /start.sh
+RUN chmod 001 /start.sh
 
 CMD ["/start.sh"]
 
