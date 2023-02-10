@@ -13,5 +13,5 @@ COPY . .
 
 RUN chmod 001 ./start.sh
 
-CMD ["start.sh"]
+CMD ["/start.sh"]
 
