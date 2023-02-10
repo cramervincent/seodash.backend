@@ -45,19 +45,10 @@ def decodeJWT(token: str) -> dict:
     except:
         return {}
 
-def check_user(data: UserLoginSchema, db:Session):
-    
-    superAdmin = {
-        'username': os.getenv('ADMIN_USR'),
-        'password': hashPassword(os.getenv('ADMIN_PSW'))
-    }
-    if data.email == superAdmin['username'] and hashPassword(data.password) == superAdmin['password']:
-        return True
-    
+def check_user(data: UserLoginSchema, db:Session):    
     users = db.query(models.Users).all()
     for user in users:
         if user.email == data.email and user.password == hashPassword(data.password):
-            print(user.email)
             return True
     
     return False 

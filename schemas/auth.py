@@ -4,6 +4,7 @@ class UserSchema(BaseModel):
     fullname: str
     email: str
     password: str
+    role:str
 
 
 

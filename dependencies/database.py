@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 PRODUCTION_DB = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PSW')}@{os.getenv('DB_HOST')}"
 DEVELOPMENT_DB = "sqlite:///./db/database.db"
-print (PRODUCTION_DB)
+
 # os.getenv('JWT_SECRET')
 if os.getenv('ENVIROMENT') == 'production':
     sql_db_url = PRODUCTION_DB
