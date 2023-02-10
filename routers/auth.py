@@ -28,7 +28,6 @@ async def create_user(user: UserSchema, db: Session = Depends(get_db)):
 async def user_login(user: UserLoginSchema, db: Session = Depends(get_db)):
     nm_of_users = db.query(models.Users).all()
     if len(nm_of_users) == 0:
-        print('geen users gevonde, superadmin wordt aangemaakt')
         new_user = models.Users(
             fullname='Admin',
             email=user.email,
@@ -44,3 +43,11 @@ async def user_login(user: UserLoginSchema, db: Session = Depends(get_db)):
             status_code=401, detail='Gebruikersnaam en/of wachtwoord niet correct.')
 
     return signJWT(user.email)
+
+@router.delete("/users")
+async def delete_all_users(db: Session = Depends(get_db)):
+    allusers = db.query(models.Users).all()
+    for user in allusers:
+        db.delete(user)
+    db.commit()
+    return "Alle users verwijderd."

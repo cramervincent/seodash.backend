@@ -16,6 +16,7 @@ load_dotenv()
 
 JWT_SECRET = os.getenv('JWT_SECRET')
 JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
+
 SALT =  os.getenv('PASSWORD_SALT').encode()
 
 
@@ -48,7 +49,7 @@ def decodeJWT(token: str) -> dict:
 def check_user(data: UserLoginSchema, db:Session):    
     users = db.query(models.Users).all()
     for user in users:
-        print(user.password, '\n', data.password, '\n', hashPassword(data.password))
+        print(user.email, ":", user.password, '\n', data.password, '\n', hashPassword(data.password).decode())
         if user.email == data.email and user.password == hashPassword(data.password):
             return True
     
