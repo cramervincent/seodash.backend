@@ -53,7 +53,7 @@ def decodeJWT(token: str) -> dict:
 def check_user(data: UserLoginSchema, db: Session):
     users = db.query(models.Users).all()
     for user in users:
-        print(user.password.decode(), '\n', hashPassword(data.password))
+        print(user.password.encode(), '\n', hashPassword(data.password))
         if user.email == data.email and user.password.decode() == hashPassword(data.password):
             return True
 
