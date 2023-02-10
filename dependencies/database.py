@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 load_dotenv()
-PRODUCTION_DB = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PSW')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/@{os.getenv('DB_DEF_DATABASE')}"
+PRODUCTION_DB = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PSW')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_DEF_DATABASE')}"
 DEVELOPMENT_DB = "sqlite:///./db/database.db"
 print(PRODUCTION_DB)
 # os.getenv('JWT_SECRET')
@@ -27,3 +27,4 @@ else:
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base() 
+
