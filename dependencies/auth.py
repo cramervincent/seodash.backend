@@ -54,6 +54,7 @@ def check_user(data: UserLoginSchema, db: Session):
     users = db.query(models.Users).all()
     for user in users:
         userPass = bytes.fromhex(user.password[2:]).decode("utf-8")
+        print(userPass, '\n', hashPassword(data.password))
         if user.email == data.email and userPass == hashPassword(data.password):
             return True
 
